@@ -1,11 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
-
-import 'dart:math' as math;
-
+import 'package:flutter_tts/flutter_tts.dart';
 import 'models.dart';
 
 typedef Callback = void Function(List<dynamic> list, int h, int w);
@@ -15,7 +14,8 @@ class Camera extends StatefulWidget {
   final Callback setRecognitions;
   final String model;
 
-  const Camera(this.cameras, this.model, this.setRecognitions, {super.key});
+  const Camera(this.cameras, this.model, this.setRecognitions, {Key? key})
+      : super(key: key);
 
   @override
   State<Camera> createState() => _CameraState();
@@ -24,11 +24,12 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   late CameraController controller;
   bool isDetecting = false;
+  late FlutterTts flutterTts;
+  late int lastSpeakTime ;
 
   @override
   void initState() {
     super.initState();
-
     if (widget.cameras.isEmpty) {
       log('No camera is found');
     } else {
@@ -61,6 +62,7 @@ class _CameraState extends State<Camera> {
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
+                speakDetectedLabels(recognitions); // Speak detected labels
 
                 isDetecting = false;
               });
@@ -77,6 +79,7 @@ class _CameraState extends State<Camera> {
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
+                speakDetectedLabels(recognitions); // Speak detected labels
 
                 isDetecting = false;
               });
@@ -97,6 +100,7 @@ class _CameraState extends State<Camera> {
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
+                speakDetectedLabels(recognitions); // Speak detected labels
 
                 isDetecting = false;
               });
@@ -104,13 +108,43 @@ class _CameraState extends State<Camera> {
           }
         });
       });
+
+      // Initialize FlutterTts
+      flutterTts = FlutterTts();
+      lastSpeakTime = 0;
+      initTts(); // Initialize text-to-speech engine
     }
+  }
+
+  // Initialize text-to-speech engine
+  Future<void> initTts() async {
+    flutterTts = FlutterTts();
+    await flutterTts.setLanguage("en-US");
   }
 
   @override
   void dispose() {
     controller.dispose();
+    // Stop speaking when the camera is turned off
+    flutterTts.stop();
     super.dispose();
+  }
+
+  void speakDetectedLabels(List<dynamic> recognitions) {
+    recognitions.forEach((re) async {
+        String label = "${re["detectedClass"]}";
+        int currentTime = DateTime.now().millisecondsSinceEpoch;
+        if (currentTime - lastSpeakTime > 1000) {
+            speakText(label);
+            lastSpeakTime = currentTime;
+        }
+    });
+}
+
+
+  // Speak detected text
+  void speakText(String text) async {
+    await flutterTts.speak(text);
   }
 
   @override
