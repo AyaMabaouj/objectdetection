@@ -6,16 +6,16 @@ import 'package:detectionobject/camera.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 
 void main() {
-  runApp(SafeDrive());
+  runApp(SafeWalk());
 }
 
-class SafeDrive extends StatelessWidget {
+class SafeWalk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('SafeDrive'),
+          title: Text('SafeWalk'),
            // Add a back arrow icon
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -25,20 +25,20 @@ class SafeDrive extends StatelessWidget {
             },
           ),
         ),
-        body: SafeDriveBody(),
+        body: SafeWalkBody(),
       ),
-                  debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: false,
 
     );
   }
 }
 
-class SafeDriveBody extends StatefulWidget {
+class SafeWalkBody extends StatefulWidget {
   @override
-  _SafeDriveBodyState createState() => _SafeDriveBodyState();
+  _SafeWalkBodyState createState() => _SafeWalkBodyState();
 }
 
-class _SafeDriveBodyState extends State<SafeDriveBody> {
+class _SafeWalkBodyState extends State<SafeWalkBody> {
   late List<CameraDescription> cameras;
   String model = ssd;
   List<dynamic>? _recognitions;
@@ -115,44 +115,7 @@ class _SafeDriveBodyState extends State<SafeDriveBody> {
             ],
           ),
         ),
-        SizedBox(height:80),
-       Container(
-  color: Colors.white, // Arrière-plan blanc
-  padding: EdgeInsets.symmetric(vertical: 10), // Espacement vertical
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      Expanded(
-        child: Column(
-          children: [
-            Icon(Icons.speed, size: 40),
-            SizedBox(height: 5),
-            Text('Vitesse'),
-          ],
-        ),
-      ),
-      Expanded(
-        child: Column(
-          children: [
-            Icon(Icons.directions_car, size: 40),
-            SizedBox(height: 5),
-            Text('Distance'),
-          ],
-        ),
-      ),
-      Expanded(
-        child: Column(
-          children: [
-            Icon(Icons.warning, size: 40),
-            SizedBox(height: 5),
-            Text('Obstacles'),
-          ],
-        ),
-      ),
-    ],
-  ),
-)
-
+       
       ],
     ),
   );

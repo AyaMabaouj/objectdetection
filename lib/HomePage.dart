@@ -1,6 +1,7 @@
 import 'package:detectionobject/SafeDrive.dart';
 import 'package:detectionobject/SafeHome.dart';
 import 'package:detectionobject/SettingsPage.dart';
+import 'package:detectionobject/widgets/SafeWalk.dart';
 
 import 'package:flutter/material.dart';
 
@@ -93,6 +94,12 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SafeDrive()),
+          );
+        }
+         else if (option == 'SafeWalk') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SafeWalk()),
           );
         }
          else if (option == 'Settings') {
