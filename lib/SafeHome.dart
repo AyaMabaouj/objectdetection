@@ -69,6 +69,8 @@ class _SafeHomeState extends State<SafeHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+        title: Text('SafeHome'),),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

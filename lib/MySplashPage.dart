@@ -62,7 +62,7 @@ class _MySplashPageState extends State<MySplashPage>
         child: ScaleTransition(
           scale: _animation,
           child: Image.asset(
-            "assets/detection.png",
+            "assets/logo.png",
             width: screenWidth * 0.6, // Ajuster la taille au besoin
             height: screenHeight * 0.6, // Ajuster la taille au besoin
           ),

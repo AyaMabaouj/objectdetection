@@ -1,4 +1,7 @@
+import 'package:detectionobject/SafeDrive.dart';
 import 'package:detectionobject/SafeHome.dart';
+import 'package:detectionobject/SettingsPage.dart';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,13 +83,25 @@ class _HomePageState extends State<HomePage> {
       elevation: 4.0,
        child: InkWell(
       onTap: () {
-        // Navigate to SafeDrive screen when tapped
         if (option == 'SafeHome') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SafeHome()),
           );
         }
+        else if (option == 'SafeDrive') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SafeDrive()),
+          );
+        }
+         else if (option == 'Settings') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
+
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

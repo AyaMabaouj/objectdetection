@@ -25,7 +25,7 @@ class _CameraState extends State<Camera> {
   late CameraController controller;
   bool isDetecting = false;
   late FlutterTts flutterTts;
-  late int lastSpeakTime ;
+  late int lastSpeakTime;
 
   @override
   void initState() {
@@ -57,12 +57,12 @@ class _CameraState extends State<Camera> {
                 imageHeight: img.height,
                 imageWidth: img.width,
                 numResults: 2,
-              ).then((recognitions) {
+              ).then((List<dynamic>? recognitions) {
                 int endTime = DateTime.now().millisecondsSinceEpoch;
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
-                speakDetectedLabels(recognitions); // Speak detected labels
+                speakDetectedLabels(recognitions); 
 
                 isDetecting = false;
               });
@@ -74,12 +74,12 @@ class _CameraState extends State<Camera> {
                 imageHeight: img.height,
                 imageWidth: img.width,
                 numResults: 2,
-              ).then((recognitions) {
+              ).then((List<dynamic>? recognitions) {
                 int endTime = DateTime.now().millisecondsSinceEpoch;
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
-                speakDetectedLabels(recognitions); // Speak detected labels
+                speakDetectedLabels(recognitions); 
 
                 isDetecting = false;
               });
@@ -95,12 +95,12 @@ class _CameraState extends State<Camera> {
                 imageStd: widget.model == yolo ? 255.0 : 127.5,
                 numResultsPerClass: 1,
                 threshold: widget.model == yolo ? 0.2 : 0.4,
-              ).then((recognitions) {
+              ).then((List<dynamic>? recognitions) {
                 int endTime = DateTime.now().millisecondsSinceEpoch;
                 log("Detection took ${endTime - startTime}");
 
                 widget.setRecognitions(recognitions!, img.height, img.width);
-                speakDetectedLabels(recognitions); // Speak detected labels
+                speakDetectedLabels(recognitions); 
 
                 isDetecting = false;
               });
@@ -109,41 +109,32 @@ class _CameraState extends State<Camera> {
         });
       });
 
-      // Initialize FlutterTts
       flutterTts = FlutterTts();
-      lastSpeakTime = 0;
-      initTts(); // Initialize text-to-speech engine
+      lastSpeakTime = DateTime.now().millisecondsSinceEpoch;
     }
-  }
-
-  // Initialize text-to-speech engine
-  Future<void> initTts() async {
-    flutterTts = FlutterTts();
-    await flutterTts.setLanguage("en-US");
   }
 
   @override
   void dispose() {
     controller.dispose();
-    // Stop speaking when the camera is turned off
     flutterTts.stop();
     super.dispose();
   }
 
-  void speakDetectedLabels(List<dynamic> recognitions) {
-    recognitions.forEach((re) async {
+  void speakDetectedLabels(List<dynamic>? recognitions) {
+    if (recognitions != null) {
+      recognitions.forEach((re) async {
         String label = "${re["detectedClass"]}";
         int currentTime = DateTime.now().millisecondsSinceEpoch;
         if (currentTime - lastSpeakTime > 1000) {
-            speakText(label);
-            lastSpeakTime = currentTime;
+          speakText(label);
+          lastSpeakTime = currentTime;
         }
-    });
-}
+      });
+    }
+  }
 
-
-  // Speak detected text
-  void speakText(String text) async {
+  Future<void> speakText(String text) async {
     await flutterTts.speak(text);
   }
 

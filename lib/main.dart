@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Object Detection',
       theme: ThemeData(
        
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 119, 160, 220)),
         useMaterial3: true,
 
       ),
